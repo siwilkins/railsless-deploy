@@ -254,13 +254,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :create_symlink, :except => { :no_release => true } do
       on_rollback do
         if previous_release
-          run "rm -f #{current_path}; ln -s #{previous_release} #{current_path}; true"
+          run "#{try_sudo} rm -f #{current_path}; #{try_sudo} ln -s #{previous_release} #{current_path}; true"
         else
           logger.important "no previous release to rollback to, rollback of symlink skipped"
         end
       end
 
-      run "rm -f #{current_path} && ln -s #{latest_release} #{current_path}"
+      run "#{try_sudo} rm -f #{current_path} && #{try_sudo} ln -s #{latest_release} #{current_path}"
     end
 
     desc <<-DESC
