@@ -232,7 +232,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         run "ln -s #{shared_path}/#{d.split('/').last} #{latest_release}/#{d}"
       end
 
-      run "chmod -R g+w #{latest_release}" if fetch(:group_writable, true)
+      run "#{try_sudo} chmod -R g+w #{latest_release}" if fetch(:group_writable, true)
       
       shared_children.map do |d|
         run <<-CMD
